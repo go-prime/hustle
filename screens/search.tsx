@@ -79,12 +79,12 @@ export default SearchScreen = props => {
       return;
     }
     setSearching(true);
+    const stringifiedFilters = JSON.stringify(filters);
     axios
       .get(
         `${constants.server_url}/api/method/billing_engine.billing_engine.api.search`,
         {
-          params: {q: search},
-          data: filters
+          params: {q: search, data: stringifiedFilters},
         },
       )
       .then(res => {
@@ -93,7 +93,7 @@ export default SearchScreen = props => {
       })
       .catch(err => {
         Alert.alert('Error', 'Failed to get results.');
-        console.log(err);
+        console.log(err.response.data);
       });
   }, [search]);
   return (
