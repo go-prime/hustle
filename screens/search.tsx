@@ -90,7 +90,6 @@ export default SearchScreen = props => {
       .then(res => {
         setSearching(false);
         setResults(res.data.message);
-        console.log(stringifiedFilters);
       })
       .catch(err => {
         Alert.alert('Error', 'Failed to get results.');
