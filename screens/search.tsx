@@ -61,45 +61,14 @@ const SearchItem = props => {
   );
 };
 
-export default SearchScreen = props => {
-  const [search, setSearch] = React.useState('');
-  const [results, setResults] = React.useState([]);
-  const [searching, setSearching] = React.useState(false);
-  const [showFilters, setShowFilters] = React.useState(false);
-  const [filters, setFilters] = React.useState({})
+const SearchFilters = ({setFilters, filters}) => {
+  const {height} = Dimensions.get('window')
   const [priceFilters, setPriceFilters] = React.useState(false)
   const [dateFilters, setDateFilters] = React.useState(false)
   const [locationFilters, setLocationFilters] = React.useState(false)
-  const {height} = Dimensions.get('window')
 
-
-  React.useEffect(() => {
-    if (search.length < 3) {
-      setResults([]);
-      return;
-    }
-    setSearching(true);
-    const stringifiedFilters = JSON.stringify(filters);
-    axios
-      .get(
-        `${constants.server_url}/api/method/billing_engine.billing_engine.api.search`,
-        {
-          params: {q: search, data: stringifiedFilters},
-        },
-      )
-      .then(res => {
-        setSearching(false);
-        setResults(res.data.message);
-      })
-      .catch(err => {
-        Alert.alert('Error', 'Failed to get results.');
-        console.log(err.response.data);
-      });
-  }, [search]);
   return (
-    <View style={styles.root}>
-      {showFilters && (
-      <View style={{height: height / 3, ...styles.filterView}}>
+    <View style={{height: height / 3, ...styles.filterView}}>
         <Heading>Filters</Heading>
         <ScrollView>
         <Row styles={styles.filterStyle}>
@@ -152,7 +121,70 @@ export default SearchScreen = props => {
         </View>)}
         </ScrollView>
       </View>
-    )}
+  )
+}
+
+export default SearchScreen = props => {
+  const [search, setSearch] = React.useState('');
+  const [results, setResults] = React.useState([]);
+  const [searching, setSearching] = React.useState(false);
+  const [showFilters, setShowFilters] = React.useState(false);
+  const [filters, setFilters] = React.useState({})
+  const [lastUpdate, setLastUpdate] = React.useState(new Date())
+
+  const getSearchResults = (cachedValue) => {
+    if (search.length < 3) {
+      setResults([]);
+      setSearching(false);
+      return;
+    }
+
+    if(cachedValue && cachedValue != `${search} ${JSON.stringify(filters)}`) {
+      // expired cache, don't run debounced function
+      console.log('expired cache')
+      return
+    }
+    console.log({cachedValue})
+
+    // debounce searches
+    const updateTime = lastUpdate ? new Date().getTime() - lastUpdate.getTime()  : 1000
+    if(lastUpdate && updateTime < 1000) {
+      console.log(`debounce search ${updateTime}`)
+      const cache = `${search} ${JSON.stringify(filters)}`
+      setTimeout(() => getSearchResults(cache), updateTime)
+      return 
+    }
+
+    setSearching(true);
+    const stringifiedFilters = JSON.stringify(filters);
+    setLastUpdate(new Date())
+    axios
+      .get(
+        `${constants.server_url}/api/method/billing_engine.billing_engine.api.search`,
+        {
+          params: {q: search, data: stringifiedFilters},
+        },
+      )
+      .then(res => {
+        console.log(res.data.message)
+        setSearching(false);
+        setResults(res.data.message);
+      })
+      .catch(err => {
+        Alert.alert('Error', 'Failed to get results.');
+        console.log(err.response.data);
+      });
+  }
+
+  React.useEffect(getSearchResults, [search, filters]);
+
+  React.useEffect(() => {
+    if(!showFilters) {
+      setFilters({})
+    }
+  }, [showFilters])
+  return (
+    <View style={styles.root}>
       <View style={styles.modalSearchInput}>
         <FontAwesomeIcon
           color={colors.primary}
@@ -169,14 +201,14 @@ export default SearchScreen = props => {
           autoFocus={true}
         />
         <Pressable onPress={() => setShowFilters(!showFilters)}>
-        <FontAwesomeIcon
-            color={colors.primary}
-            style={{width: 50, marginRight: 12}}
-            size={28}
-            icon={faFilter}
-          />
+        <Text style={{...styles.filterTextStyle, color: showFilters ? "crimson": "#007bff" }}>{showFilters ? "CLEAR FILTERS" : "FILTER"}</Text>
         </Pressable>
       </View>
+      {showFilters && (<SearchFilters 
+        filters={filters}
+        setFilters={setFilters}
+        
+        />)}
       {searching ? (
         <Centered>
           <ActivityIndicator color={colors.primary} size={48} />
@@ -241,5 +273,10 @@ const styles = StyleSheet.create({
   filterStyle: {
     justifyContent: 'space-between',
     marginBottom: 18
+  },
+  filterTextStyle: {
+    fontWeight: 700,
+    fontSize: 18,
+    marginRight: 18
   }
 });

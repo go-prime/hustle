@@ -29,6 +29,8 @@ import {Heading, Paragraph} from '../components/text';
 import Field from '../components/form'
 import { ProfileButton } from '../components/button';
 import ImagePicker from '../components/image_picker'
+import LanguagePicker from '../components/language_picker';
+import CurrencyPicker from '../components/currency_picker';
 
 
 const onSave = (fullname, phone, address, email, imgData, imgName) => {
@@ -66,6 +68,10 @@ export default function ProfileScreen({navigation}) {
   const [address, setAddress] = React.useState('');
   const [imgData, setImgData] = React.useState(null)
   const [imgName, setImgName] = React.useState('')
+  const [lang, setLang] = React.useState('English')
+  const [langPickerVisible, setLangPickerVisible] = React.useState(false)
+  const [currencyPickerVisible, setCurrencyPickerVisible] = React.useState(false)
+  const [currency, setCurrency] = React.useState('USD')
 
 
   React.useEffect(() => {
@@ -110,6 +116,23 @@ export default function ProfileScreen({navigation}) {
             : 'Hustle Shopper'}
         </Text>
       </View>
+      <Heading heading="Settings" />
+      <LanguagePicker 
+        visible={langPickerVisible}
+        currentLanguage={lang}
+        onLanguageSelect={(l) => {setLang(l); setLangPickerVisible(false)}} 
+      />
+      <CurrencyPicker 
+        visible={currencyPickerVisible}
+        currency={currency}
+        onCurrencySelect={(c) => {setCurrency(c); setCurrencyPickerVisible(false)}} 
+      />
+      <ProfileButton action={() => {
+            setLangPickerVisible(true)
+          }} label={`Default Language: ${lang}`} />
+      <ProfileButton action={() => {
+            setCurrencyPickerVisible(true)
+          }} label={`App Currency: ${currency}`} />
       <Heading heading="Actions" />
       <ProfileButton action={() => {
             navigation.navigate('Manage Storefront');
