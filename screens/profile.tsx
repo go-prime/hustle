@@ -31,6 +31,7 @@ import { ProfileButton } from '../components/button';
 import ImagePicker from '../components/image_picker'
 import LanguagePicker from '../components/language_picker';
 import CurrencyPicker from '../components/currency_picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const onSave = (fullname, phone, address, email, imgData, imgName) => {
@@ -73,6 +74,20 @@ export default function ProfileScreen({navigation}) {
   const [currencyPickerVisible, setCurrencyPickerVisible] = React.useState(false)
   const [currency, setCurrency] = React.useState('USD')
 
+  const saveCurrencyToStorage = async (currency: string) => {
+    try {
+      await AsyncStorage.setItem('default_currency', currency);
+      console.log('Currency set to:', currency);
+    } catch (e) {
+      console.error('Failed to save the currency.', e);
+    }
+  };
+
+  const onCurrencySelect = (c: string) => {
+    setCurrency(c);
+    setCurrencyPickerVisible(false);
+    saveCurrencyToStorage(c);
+  };
 
   React.useEffect(() => {
     axios
@@ -125,7 +140,8 @@ export default function ProfileScreen({navigation}) {
       <CurrencyPicker 
         visible={currencyPickerVisible}
         currency={currency}
-        onCurrencySelect={(c) => {setCurrency(c); setCurrencyPickerVisible(false)}} 
+        // onCurrencySelect={(c) => {setCurrency(c); setCurrencyPickerVisible(false)}} 
+        onCurrencySelect={onCurrencySelect} 
       />
       <ProfileButton action={() => {
             setLangPickerVisible(true)
