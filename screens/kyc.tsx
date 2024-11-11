@@ -17,6 +17,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCheck} from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import constants from '../constants';
+import { FormattedMessage } from 'react-intl';
 
 const KYCForm = () => {
   const [fullname, setFullName] = React.useState('');
@@ -105,31 +106,23 @@ const KYCForm = () => {
 
   return (
     <ScrollView>
-      <Heading>Status</Heading>
+      <Heading>{<FormattedMessage id="kyc_status_label" />}</Heading>
       <View style={{width: 150}}>
         <Pill color={statusColorMap[status]}>{status}</Pill>
       </View>
       {status == 'Approved' ? (
-        <Paragraph>Your KYC process has been approved.</Paragraph>
+        <Paragraph>{<FormattedMessage id="kyc_success" />}</Paragraph>
       ) : (
         <>
           <Paragraph>
-            Please fill in the details below to complete your KYC process. To
-            complete your KYC process, you will need to upload your ID, a clear
-            front facing photo of yourself, and a proof of residence. Our A.I
-            tools will verify your details and provide you with an indication to
-            show whether your KYC process is successful or not.
+            {<FormattedMessage id="kyc_fill_info_instrustion" />}
           </Paragraph>
           <Paragraph>
-            If you are unsuccessful and feel a mistake has been made, please get
-            touch with our support team.
+            {<FormattedMessage id="kyc_fill_info_instrustion_2" />}
           </Paragraph>
           <Heading>Personal Details</Heading>
           <Paragraph>
-            This is basic information collected about who you are and where you
-            live. Please make sure the name matches the one printed on your ID,
-            and that your address is the same one as is printed on your proof of
-            residence.
+            {<FormattedMessage id="kyc_personal_details" />}
           </Paragraph>
           <Field
             value={fullname}
@@ -145,17 +138,12 @@ const KYCForm = () => {
             label={'Address'}
           />
 
-          <Heading>National ID</Heading>
+          <Heading>{<FormattedMessage id="kyc_national_id" />}</Heading>
           <Paragraph>
-            A valid national identity document that can be uploaded via this
-            platform must clearly state your name and have a picture. Acceptable
-            identity documents for this platform are your national ID (metal or
-            plastic), your passport or driver's license. Since the pictures on
-            your ID will be compared with the one you take, please make sure
-            your face is clearly visible in your photo.
+            {<FormattedMessage id="kyc_national_id_details" />}
           </Paragraph>
           <ImagePicker
-            label={'Upload your ID here:'}
+            label={<FormattedMessage id="kyc_upload_id_instruction" />}
             onImageChange={setIDImgData}
             onNameChange={setIDImgName}
             initial={iDImgInitial}
@@ -163,20 +151,17 @@ const KYCForm = () => {
 
           <ImagePicker
             cameraOnly
-            label={'Take a clear front facing photo of yourself here:'}
+            label={<FormattedMessage id="kyc_image_clarity_instruction" />}
             onImageChange={setFaceImgData}
             onNameChange={setFaceImgName}
             initial={faceImgInitial}
           />
-          <Heading>Proof of Residence</Heading>
+          <Heading>{<FormattedMessage id="kyc_proof_of_reference_heading" />}</Heading>
           <Paragraph>
-            Your proof of residence must clearly state your name and the you've
-            filled in earlier. The document you upload must be a picture and may
-            be in the form of a letter from your employer, a bill in your name
-            or a bank statement.
+            {<FormattedMessage id="kyc_upload_proof_of_reference_instruction" />}
           </Paragraph>
           <ImagePicker
-            label={'Upload your proof of residence:'}
+            label={<FormattedMessage id="kyc_proof_residence" />}
             onImageChange={setProofImgData}
             onNameChange={setProofImgName}
             initial={proofImgInitial}

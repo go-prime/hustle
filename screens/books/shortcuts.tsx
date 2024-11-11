@@ -48,6 +48,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Onboarding from '../../components/books/onboarding';
 import OnboardingCard from '../../components/books/onboarding';
 import {Row} from '../../components/layout';
+import { FormattedMessage } from 'react-intl';
 
 const ICON_MAP = {
   'fa-book': faBook,
@@ -333,7 +334,7 @@ export default function ShortcutScreen(props) {
         )}
         {!(input && input.length > 3) && (
           <>
-            {onboarding.length > 0 && <Heading>Getting Started</Heading>}
+            {onboarding.length > 0 && <Heading>{<FormattedMessage id="getting_started" />}</Heading>}
             {onboarding.map(on => (
               <OnboardingCard
                 loadOnboarding={loadOnboarding}
@@ -341,7 +342,7 @@ export default function ShortcutScreen(props) {
                 key={on.target}
               />
             ))}
-            <Heading>Quick Actions</Heading>
+            <Heading>{<FormattedMessage id="quick_actions" />}</Heading>
             <ScrollView horizontal>
               <Row styles={{gap: 12, margin: 12}}>
                 {QUICK_ACTION_LIST.map((fi, idx) => (

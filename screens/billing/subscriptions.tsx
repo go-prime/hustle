@@ -19,6 +19,7 @@ import SubscriptionCard from '../../components/billing_engine/subscription_card'
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import SubscriptionHistory from '../../components/billing_engine/subscription_history';
 import handleErr from '../../scripts/axios';
+import { FormattedMessage } from 'react-intl';
 
 export default function SubscriptionListScreen(props) {
   const [data, setData] = React.useState(null);
@@ -42,14 +43,22 @@ export default function SubscriptionListScreen(props) {
     return <Loading />;
   }
 
+  const purchaseSubsHeading = () => (
+    <View>
+      <Text style={styles.boldText}>
+        <FormattedMessage id="buy" /> <FormattedMessage id="subscriptions" />
+      </Text>
+  </View>
+  );
+
   return (
     <ScrollView>
       <View style={styles.content}>
-        <Heading heading="Purchase Subscriptions" />
+        <Heading heading={purchaseSubsHeading()} />
         <View style={styles.grid}>
           {data.subscriptions.map(item => <SubscriptionCard {...item} />)}
         </View>
-        <Heading heading="My Subscription History" />
+        <Heading heading={<FormattedMessage id="subscription_history" />} />
         {data.subscription_history.map(item => (
           <SubscriptionHistory key={item.subscription_id} {...item} />
         ))}
@@ -69,5 +78,10 @@ const styles = StyleSheet.create({
     gap: 12,
     justifyContent: 'center',
     flexWrap: 'wrap'
+  },
+  boldText: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: 'black'
   }
 });

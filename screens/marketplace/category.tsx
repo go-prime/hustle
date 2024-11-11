@@ -23,6 +23,7 @@ import {Appearance} from 'react-native';
 import {Heading, Paragraph, SubTitle, Title} from '../../components/text';
 import {useIsFocused} from '@react-navigation/native';
 import {ItemButton} from '../../components/button';
+import { FormattedMessage } from 'react-intl';
 
 export default function MarketplaceCategoryScreen(props) {
   const [data, setData] = React.useState(null);
@@ -71,7 +72,7 @@ export default function MarketplaceCategoryScreen(props) {
       <View style={styles.content}>
           <Title title={data.name} />
           <Paragraph text={data.description} />
-          <Heading>Produce</Heading>
+          <Heading>{<FormattedMessage id="produce" />}</Heading>
           <FlatList 
             data={data.produce}
             renderItem={({item}) => (renderProduce(item))}
