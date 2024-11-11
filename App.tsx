@@ -18,7 +18,9 @@ import {StyleSheet} from 'react-native';
 import HomeScreenNavigator from './screens/navigator';
 import {Appearance} from 'react-native';
 import ChatButton from './components/chat';
-import {screens} from './hooks/colors'
+import {screens} from './hooks/colors';
+import { IntlProvider } from 'react-intl';
+import messages from './intl/messages';
 const LightTheme = {
   ...DefaultTheme,
   colors: {
@@ -63,12 +65,16 @@ function App(): JSX.Element {
     });
   }, []);
 
+  const locale = "sn"
+
   return (
     <NavigationContainer
       ref={navContainerRef}
       theme={theme}>
-      <HomeScreenNavigator accent={theme.colors.card} textColor={theme.colors.text} iconColor={theme.colors.text} />
-      <ChatButton visible={chatVisible} route={currentRoute} />
+      <IntlProvider locale={locale} messages={messages[locale]}>
+        <HomeScreenNavigator accent={theme.colors.card} textColor={theme.colors.text} iconColor={theme.colors.text} />
+        <ChatButton visible={chatVisible} route={currentRoute} />
+      </IntlProvider>
     </NavigationContainer>
   );
 }

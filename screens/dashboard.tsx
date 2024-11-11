@@ -30,6 +30,7 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {getAbsoluteURL} from '../utils';
 import Geolocation from 'react-native-geolocation-service';
 import { LoadingButton } from '../components/button';
+import { FormattedMessage } from 'react-intl';
 
 const DashboardCard = props => {
   const animated = new Animated.Value(1);
@@ -65,8 +66,8 @@ const DashboardCard = props => {
           />
         </Centered>
         <View style={styles.loginText}>
-          <Text style={styles.title}>{props.title}</Text>
-          <Text style={styles.subtitle}>{props.message}</Text>
+          <Text style={styles.title}><FormattedMessage id={props.title} /></Text>
+          <Text style={styles.subtitle}><FormattedMessage id={props.message} /></Text>
         </View>
       </Animated.View>
     </Pressable>
@@ -141,16 +142,16 @@ export default function DashboardScreen({navigation}) {
               </Row>
               <Row>
                 <DashboardCard
-                  title="Marketplace"
-                  message="Shop with our hustlers."
+                  title="market"
+                  message="shop"
                   source={require('../assets/images/marketplace.png')}
                   handler={() => navigation.navigate("Marketplace Home")}
                   width={width / 2 - 48}
                   height={height / 5 - 12}
                 />
                 <DashboardCard
-                  title="Partners"
-                  message="Equip your next hustle."
+                  title="partner_store"
+                  message="equip"
                   source={require('../assets/images/partner_store.png')}
                   handler={() => navigation.navigate("Home")}
                   width={width / 2 - 48}
@@ -159,17 +160,17 @@ export default function DashboardScreen({navigation}) {
               </Row>
               <Row>
                 <DashboardCard
-                  title="Edutec"
+                  title="edutec"
                   source={require('../assets/images/edutec.png')}
-                  message="Get the skills needed for your next hustle."
+                  message="skills"
                   handler={() => navigation.navigate("Courses Home")}
                   width={width / 2 - 48}
                   height={height / 5 - 12}
                 />
                 <DashboardCard
-                  title="Business Books"
+                  title="business_books"
                   source={require('../assets/images/books.png')}
-                  message="Stay on top of your hustle."
+                  message="funds"
                   handler={() => {
                     navigation.navigate("Books")
                   }}
