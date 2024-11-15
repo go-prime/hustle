@@ -97,6 +97,15 @@ export default function ProfileScreen({navigation, setLocale}) {
   };
 
   React.useEffect(() => {
+    const loadLanguage = async () => {
+      const storedLang = await AsyncStorage.getItem('locale');
+      if (storedLang) {
+        setLang(storedLang); // Set the loaded language as current language
+      }
+    };
+
+    loadLanguage();
+  
     axios
       .get(
         `${constants.server_url}/api/method/billing_engine.billing_engine.api.client_detail`,
