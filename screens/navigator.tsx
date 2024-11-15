@@ -258,7 +258,7 @@ const NavOptions = props => {
 };
 
 export default function HomeScreenNavigator(props): JSX.Element {
-  const {navigation} = props;
+  const { navigation, setLocale } = props;
   const wishlistedItems = useWishlistCount();
   const itemsInCart = useCartCount();
   const NavOptionsComponent = React.useCallback(() => {
@@ -326,7 +326,9 @@ export default function HomeScreenNavigator(props): JSX.Element {
           name="Cart" 
           options={{ title: <FormattedMessage id="cart_page" /> }} 
       />
-      <Drawer.Screen component={ProfileScreen} name="Profile" />
+      <Drawer.Screen name="Profile">
+        {props => <ProfileScreen {...props} setLocale={setLocale} />}
+      </Drawer.Screen>
       <Drawer.Screen component={SearchScreen} name="Search" />
       <Drawer.Screen 
           component={SubscriptionListScreen} 
@@ -354,7 +356,12 @@ export default function HomeScreenNavigator(props): JSX.Element {
       <Drawer.Screen component={CategoryScreen} name="Category" />
 
       {/* Edutec Screens */}
-      <Drawer.Screen component={CoursesHomeScreen} name="Courses Home" />
+      {/* <Drawer.Screen component={CoursesHomeScreen} name="Courses Home" /> */}
+      <Drawer.Screen 
+          component={CoursesHomeScreen} 
+          name="Courses Home" 
+          options={{ title: <FormattedMessage id="courses_home" /> }} 
+      />
       <Drawer.Screen component={CourseCategoryScreen} name="Course Category" />
       <Drawer.Screen component={CourseScreen} name="Course" />
       <Drawer.Screen component={VideoPlayer} name="Video" />

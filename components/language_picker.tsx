@@ -1,13 +1,14 @@
 import React from 'react';
 import HubPicker from './basePicker';
+import { FormattedMessage } from 'react-intl';
 
 const LanguagePicker = ({visible, currentLanguage, onLanguageSelect}) => {
     return <HubPicker 
-                options={["English", "Shona"]}
+                options={["en", "sn"]}
                 visible={visible}
                 value={currentLanguage}
                 onValueChange={onLanguageSelect}
-                heading={"Select your Language"}
+                heading={<FormattedMessage id="select_language" />}
                  />
 }
 

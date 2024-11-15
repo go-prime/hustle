@@ -53,7 +53,13 @@ const messages = {
         produce_category: 'Product Category',
         subscriptions: 'Subscriptions',
         buy: "Purchase",
-        subscription_history: "Subscription History"
+        subscription_history: "Subscription History",
+        select_language: "Select Your Language",
+        my_courses: "My Courses",
+        continue_learning: "Continue Learning",
+        subjects: "Subjects",
+        featured_courses: "Featured Courses",
+        welcome: "Welcome"
     },
     sn: {
         market: "Musika",
@@ -107,7 +113,13 @@ const messages = {
         produce_category: 'Mhando yeMudziyo',
         subscriptions: 'Masubscription',
         buy: 'Tenga',
-        subscription_history: 'Nhorondo Yemasubscription'
+        subscription_history: 'Nhorondo Yemasubscription',
+        select_language: "Sarudza Mutauro Wako",
+        my_courses: "Makosi Angu",
+        continue_learning: "Ramba Uchidzidza",
+        subjects: "Zvidzidzo",
+        featured_courses: "Makosi Akasarudzwa",
+        welcome: "Kwaziwai"
     }
 }
 

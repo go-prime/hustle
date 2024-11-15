@@ -138,7 +138,7 @@ export default function DashboardScreen({navigation}) {
           {username && (
             <>
               <Row styles={{justifyContent: 'center'}}>
-                <Text style={styles.welcome}>Welcome {username}</Text>
+                <Text style={styles.welcome}>{<FormattedMessage id="welcome" />} {username}</Text>
               </Row>
               <Row>
                 <DashboardCard
@@ -190,7 +190,7 @@ export default function DashboardScreen({navigation}) {
                   color={colors.primary}
                   size={24}
                 />
-                <Text style={styles.signIn}>{'  '} Log Out</Text>
+                <Text style={styles.signIn}>{'  '} {<FormattedMessage id="log_out" />}</Text>
               </Row>
             </LoadingButton>
           )}

@@ -61,7 +61,7 @@ const onSave = (fullname, phone, address, email, imgData, imgName) => {
 };
 
 
-export default function ProfileScreen({navigation}) {
+export default function ProfileScreen({navigation, setLocale}) {
   const isFocused = useIsFocused();
   const [data, setData] = React.useState('');
   const [fullname, setFullName] = React.useState('');
@@ -70,7 +70,7 @@ export default function ProfileScreen({navigation}) {
   const [address, setAddress] = React.useState('');
   const [imgData, setImgData] = React.useState(null)
   const [imgName, setImgName] = React.useState('')
-  const [lang, setLang] = React.useState('English')
+  const [lang, setLang] = React.useState('en');
   const [langPickerVisible, setLangPickerVisible] = React.useState(false)
   const [currencyPickerVisible, setCurrencyPickerVisible] = React.useState(false)
   const [currency, setCurrency] = React.useState('USD')
@@ -88,6 +88,12 @@ export default function ProfileScreen({navigation}) {
     setCurrency(c);
     setCurrencyPickerVisible(false);
     saveCurrencyToStorage(c);
+  };
+
+  const handleLanguageSelect = (language) => {
+    setLang(language);
+    setLocale(language); // Update the locale in App.tsx
+    setLangPickerVisible(false);
   };
 
   React.useEffect(() => {
@@ -136,7 +142,11 @@ export default function ProfileScreen({navigation}) {
       <LanguagePicker 
         visible={langPickerVisible}
         currentLanguage={lang}
-        onLanguageSelect={(l) => {setLang(l); setLangPickerVisible(false)}} 
+        onLanguageSelect={(l) => {
+          setLang(l); 
+          setLangPickerVisible(false);
+          handleLanguageSelect(l);
+        }} 
       />
       <CurrencyPicker 
         visible={currencyPickerVisible}
