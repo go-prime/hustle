@@ -18,7 +18,10 @@ import {StyleSheet} from 'react-native';
 import HomeScreenNavigator from './screens/navigator';
 import {Appearance} from 'react-native';
 import ChatButton from './components/chat';
-import {screens} from './hooks/colors'
+import {screens} from './hooks/colors';
+import { IntlProvider } from 'react-intl';
+import messages from './intl/messages';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const LightTheme = {
   ...DefaultTheme,
   colors: {
@@ -32,12 +35,26 @@ const NightTheme = {
 };
 
 function App(): JSX.Element {
+  const [locale, setLocale] = React.useState("en");
   const [chatVisible, setChatVisible] = React.useState(false);
   const [currentRoute, setCurrentRoute] = React.useState('');
   const [theme, setTheme] = React.useState(LightTheme)
   const navContainerRef = useNavigationContainerRef();
 
+  const handleSetLocale = async (newLocale) => {
+    console.log(`Now setting new locale ${newLocale}`)
+    await AsyncStorage.setItem('locale', newLocale);
+    setLocale(newLocale);
+  };
+
   React.useEffect(() => {
+    const loadLocale = async () => {
+      const storedLocale = await AsyncStorage.getItem('locale');
+      if (storedLocale) {
+        setLocale(storedLocale);
+      }
+    };
+    loadLocale();
     navContainerRef.addListener('state', e => {
       if (e.data.state.history.length) {
         const length = e.data.state.history.length;
@@ -63,12 +80,20 @@ function App(): JSX.Element {
     });
   }, []);
 
+
   return (
     <NavigationContainer
       ref={navContainerRef}
       theme={theme}>
-      <HomeScreenNavigator accent={theme.colors.card} textColor={theme.colors.text} iconColor={theme.colors.text} />
-      <ChatButton visible={chatVisible} route={currentRoute} />
+      <IntlProvider locale={locale} messages={messages[locale]}>
+        <HomeScreenNavigator 
+          accent={theme.colors.card}
+          textColor={theme.colors.text}
+          iconColor={theme.colors.text} 
+          setLocale={handleSetLocale}
+        />
+        <ChatButton visible={chatVisible} route={currentRoute} />
+      </IntlProvider>
     </NavigationContainer>
   );
 }

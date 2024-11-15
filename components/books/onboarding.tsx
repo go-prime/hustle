@@ -15,6 +15,7 @@ import {shadow} from '../../styles/inputs';
 import { useNavigation } from '@react-navigation/native';
 import constants from '../../constants';
 import axios from 'axios';
+import { FormattedMessage } from 'react-intl';
 
 
 const OnboardingStep = props => {
@@ -114,7 +115,7 @@ const OnboardingCard = (props) => {
     <View style={styles.card}>
       <Row styles={{justifyContent: 'flex-end'}}>
         <Pressable onPress={skipOnboarding} style={styles.skipPressable}>
-          <Text style={styles.skip}>SKIP</Text>
+          <Text style={styles.skip}>{<FormattedMessage id="skip" />}</Text>
         </Pressable>
       </Row>
       <SubTitle>{data.target}</SubTitle>

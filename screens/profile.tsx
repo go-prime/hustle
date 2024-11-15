@@ -31,6 +31,8 @@ import { ProfileButton } from '../components/button';
 import ImagePicker from '../components/image_picker'
 import LanguagePicker from '../components/language_picker';
 import CurrencyPicker from '../components/currency_picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FormattedMessage } from 'react-intl';
 
 
 const onSave = (fullname, phone, address, email, imgData, imgName) => {
@@ -59,7 +61,7 @@ const onSave = (fullname, phone, address, email, imgData, imgName) => {
 };
 
 
-export default function ProfileScreen({navigation}) {
+export default function ProfileScreen({navigation, setLocale}) {
   const isFocused = useIsFocused();
   const [data, setData] = React.useState('');
   const [fullname, setFullName] = React.useState('');
@@ -68,13 +70,42 @@ export default function ProfileScreen({navigation}) {
   const [address, setAddress] = React.useState('');
   const [imgData, setImgData] = React.useState(null)
   const [imgName, setImgName] = React.useState('')
-  const [lang, setLang] = React.useState('English')
+  const [lang, setLang] = React.useState('en');
   const [langPickerVisible, setLangPickerVisible] = React.useState(false)
   const [currencyPickerVisible, setCurrencyPickerVisible] = React.useState(false)
   const [currency, setCurrency] = React.useState('USD')
 
+  const saveCurrencyToStorage = async (currency: string) => {
+    try {
+      await AsyncStorage.setItem('default_currency', currency);
+      console.log('Currency set to:', currency);
+    } catch (e) {
+      console.error('Failed to save the currency.', e);
+    }
+  };
+
+  const onCurrencySelect = (c: string) => {
+    setCurrency(c);
+    setCurrencyPickerVisible(false);
+    saveCurrencyToStorage(c);
+  };
+
+  const handleLanguageSelect = (language) => {
+    setLang(language);
+    setLocale(language); // Update the locale in App.tsx
+    setLangPickerVisible(false);
+  };
 
   React.useEffect(() => {
+    const loadLanguage = async () => {
+      const storedLang = await AsyncStorage.getItem('locale');
+      if (storedLang) {
+        setLang(storedLang); // Set the loaded language as current language
+      }
+    };
+
+    loadLanguage();
+  
     axios
       .get(
         `${constants.server_url}/api/method/billing_engine.billing_engine.api.client_detail`,
@@ -120,12 +151,17 @@ export default function ProfileScreen({navigation}) {
       <LanguagePicker 
         visible={langPickerVisible}
         currentLanguage={lang}
-        onLanguageSelect={(l) => {setLang(l); setLangPickerVisible(false)}} 
+        onLanguageSelect={(l) => {
+          setLang(l); 
+          setLangPickerVisible(false);
+          handleLanguageSelect(l);
+        }} 
       />
       <CurrencyPicker 
         visible={currencyPickerVisible}
         currency={currency}
-        onCurrencySelect={(c) => {setCurrency(c); setCurrencyPickerVisible(false)}} 
+        // onCurrencySelect={(c) => {setCurrency(c); setCurrencyPickerVisible(false)}} 
+        onCurrencySelect={onCurrencySelect} 
       />
       <ProfileButton action={() => {
             setLangPickerVisible(true)
@@ -133,18 +169,18 @@ export default function ProfileScreen({navigation}) {
       <ProfileButton action={() => {
             setCurrencyPickerVisible(true)
           }} label={`App Currency: ${currency}`} />
-      <Heading heading="Actions" />
+      <Heading heading={<FormattedMessage id="actions" />} />
       <ProfileButton action={() => {
             navigation.navigate('Manage Storefront');
-          }} label={"Manage Storefront"} />
+          }} label={<FormattedMessage id="manage_store" />} />
       <ProfileButton action={() => {
             navigation.navigate('Subscriptions');
-          }} label={"Browse Subscriptions"} />
+          }} label={<FormattedMessage id="browse_subscriptions" />} />
 
-      <Heading heading="User Details" />
+    <Heading heading={<FormattedMessage id="user_details" />} />
       <ImagePicker 
         initial={data.photo}
-        label={"Profile Photo"}
+        label={<FormattedMessage id="profile_photo" />}
         onImageChange={setImgData}
         onNameChange={setImgName} />
       <Field value={fullname} onTextChange={setFullName} label={"Full Name"} />
@@ -153,7 +189,7 @@ export default function ProfileScreen({navigation}) {
       <Field value={address} multiline onTextChange={setAddress} label={"Address"} />
 
       <Heading heading="KYC" />
-        <Paragraph>Manage your "Know your customer(KYC) to get even more out of Hustle Hub".</Paragraph>
+        <Paragraph>{<FormattedMessage id="profile_kyc_description" />}.</Paragraph>
         <Pressable
         onPress={() => navigation.navigate("KYC Information")}
         style={styles.kyc}>

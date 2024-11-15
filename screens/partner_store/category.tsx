@@ -10,6 +10,7 @@ import { ItemButton } from '../../components/button';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Heading, Paragraph, Title } from '../../components/text';
 import handleResourceRetrievalError from '../../scripts/permissions';
+import { FormattedMessage } from 'react-intl';
 
 
 export default function CategoryScreen(props) {
@@ -55,7 +56,7 @@ export default function CategoryScreen(props) {
       <View style={styles.content}>
         <Title title={props.route.params.category}/>
         <Paragraph text={data.description}/>
-        <Heading heading="Products" />
+        <Heading>{<FormattedMessage id="produce" />}</Heading>
         <FlatList 
           data={data.products}
           renderItem={({item}) => (renderProduct(item))}

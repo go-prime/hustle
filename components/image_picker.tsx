@@ -10,6 +10,7 @@ import Centered from './layout';
 import {
   useCameraPermission,
 } from 'react-native-vision-camera';
+import { FormattedMessage } from 'react-intl';
 
 export default HHImagePicker = props => {
   const [img, setImg] = React.useState(null);
@@ -98,11 +99,11 @@ export default HHImagePicker = props => {
         <View style={styles.container}>
           <Pressable style={styles.selectBtn} onPress={selectDeviceImg}>
             <FontAwesomeIcon size={24} color={'#333'} icon={faImage} />
-            <Text style={styles.selectBtnText}>From Camera</Text>
+            <Text style={styles.selectBtnText}>{<FormattedMessage id="from_device" />}</Text>
           </Pressable>
           {!props.cameraOnly && <Pressable style={styles.selectBtn} onPress={selectGalleryImg}>
             <FontAwesomeIcon size={24} color={'#333'} icon={faCamera} />
-            <Text style={styles.selectBtnText}>From Device</Text>
+            <Text style={styles.selectBtnText}>{<FormattedMessage id="from_camera" />}</Text>
           </Pressable>}
         </View>
       )}

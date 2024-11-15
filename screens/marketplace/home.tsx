@@ -12,6 +12,7 @@ import CategoryPill from '../../components/marketplace/category';
 import {Heading} from '../../components/text';
 import { CategoryButton, ItemButton } from '../../components/button';
 import { useIsFocused } from '@react-navigation/native';
+import { FormattedMessage } from 'react-intl';
 
 export default function MarketplaceHome({navigation}) {
   const [data, setData] = React.useState(null);
@@ -63,7 +64,7 @@ export default function MarketplaceHome({navigation}) {
           }}
         />
       </View>
-      <Heading heading="Categories" />
+      <Heading heading={<FormattedMessage id="categories" />} />
       <View style={{flexWrap: 'wrap'}}>
         {data.categories.map((p, index) => (
           <CategoryButton
@@ -76,7 +77,7 @@ export default function MarketplaceHome({navigation}) {
           />
         ))}
       </View>
-      <Heading heading="Featured Produce" />
+      <Heading heading={<FormattedMessage id="featured_produce" />} />
       <ScrollView horizontal>
       <Row styles={{gap: 12, marginLeft: 12, marginBottom: 24}}>
       {data.produce

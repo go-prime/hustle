@@ -76,6 +76,7 @@ import {Row} from '../components/layout';
 import useUserProfile from '../hooks/user';
 import ImageIcon from '../components/image';
 import DashboardScreen from './dashboard';
+import { FormattedMessage } from 'react-intl';
 
 const Drawer = createDrawerNavigator();
 
@@ -155,7 +156,7 @@ function DrawerContent(props): JSX.Element {
             <Pressable onPress={() => props.navigation.navigate('Profile')}>
               <Pill>
                 <FontAwesomeIcon icon={faEdit} color="white" size={14} />
-                <Text> Edit Profile</Text>
+                <Text> {<FormattedMessage id="edit_proile" />}</Text>
               </Pill>
             </Pressable>
           </Row>
@@ -165,34 +166,34 @@ function DrawerContent(props): JSX.Element {
         color={props.iconColor}
         source={require('../assets/images/marketplace.png')}
         dark_source={require('../assets/images/marketplace_dark.png')}
-        label="Marketplace"
+        label={<FormattedMessage id="market" />}
         handler={() => props.navigation.navigate('Marketplace Home')}
       />
       <DrawerItem
         color={props.iconColor}
         source={require('../assets/images/partner_store.png')}
         dark_source={require('../assets/images/partner_store_dark.png')}
-        label="Partner Store"
+        label={<FormattedMessage id="partner_store" />}
         handler={() => props.navigation.navigate('Home')}
       />
       <DrawerItem
         color={props.iconColor}
         source={require('../assets/images/edutec.png')}
         dark_source={require('../assets/images/edutec_dark.png')}
-        label="Edutec"
+        label={<FormattedMessage id="edutec" />}
         handler={() => props.navigation.navigate('Courses Home')}
       />
       <DrawerItem
         color={props.iconColor}
         source={require('../assets/images/books.png')}
         dark_source={require('../assets/images/books_dark.png')}
-        label="Business Books"
+        label={<FormattedMessage id="business_books" />}
         handler={() => props.navigation.navigate('Books')}
       />
       <DrawerItem
         icon={faHeart}
         color={props.iconColor}
-        label="My Wishlist"
+        label={<FormattedMessage id="wish_list" />}
         badgeText={`${props.wishlistedItems}`}
         handler={() => props.navigation.navigate('Wishlist')}
       />
@@ -200,7 +201,7 @@ function DrawerContent(props): JSX.Element {
         icon={faShoppingCart}
         badgeText={`${props.itemsInCart}`}
         color={props.iconColor}
-        label="My Shopping Cart"
+        label={<FormattedMessage id="shopping_cart" />}
         handler={() => props.navigation.navigate('Cart')}
       />
       <DrawerItem
@@ -209,7 +210,9 @@ function DrawerContent(props): JSX.Element {
         }
         color={props.iconColor}
         label={
-          userDetails && userDetails.full_name ? 'Log out' : 'Log In / Sign up'
+          <FormattedMessage 
+              id={userDetails && userDetails.full_name ? "log_out" : "log_in_signup"} 
+          />
         }
         handler={userDetails && userDetails.full_name ? logOut : logIn}
       />
@@ -255,7 +258,7 @@ const NavOptions = props => {
 };
 
 export default function HomeScreenNavigator(props): JSX.Element {
-  const {navigation} = props;
+  const { navigation, setLocale } = props;
   const wishlistedItems = useWishlistCount();
   const itemsInCart = useCartCount();
   const NavOptionsComponent = React.useCallback(() => {
@@ -312,11 +315,26 @@ export default function HomeScreenNavigator(props): JSX.Element {
         name="Sign Up"
         options={{headerShown: false}}
       />
-      <Drawer.Screen component={WishlistScreen} name="Wishlist" />
-      <Drawer.Screen component={CartScreen} name="Cart" />
-      <Drawer.Screen component={ProfileScreen} name="Profile" />
+      <Drawer.Screen 
+          component={WishlistScreen} 
+          name="Wishlist" 
+          options={{ title: <FormattedMessage id="wish_list" /> }} 
+      />
+
+      <Drawer.Screen 
+          component={MarketplaceHome} 
+          name="Cart" 
+          options={{ title: <FormattedMessage id="cart_page" /> }} 
+      />
+      <Drawer.Screen name="Profile">
+        {props => <ProfileScreen {...props} setLocale={setLocale} />}
+      </Drawer.Screen>
       <Drawer.Screen component={SearchScreen} name="Search" />
-      <Drawer.Screen component={SubscriptionListScreen} name="Subscriptions" />
+      <Drawer.Screen 
+          component={SubscriptionListScreen} 
+          name="Subscriptions" 
+          options={{ title: <FormattedMessage id="subscriptions" /> }} 
+      />
       <Drawer.Screen component={SubscriptionScreen} name="Subscription" />
       <Drawer.Screen component={KYCForm} name="KYC Information" />
       <Drawer.Screen
@@ -326,9 +344,10 @@ export default function HomeScreenNavigator(props): JSX.Element {
       />
 
       {/* Partner Screens */}
-      <Drawer.Screen
-        component={MarketplaceCategoryScreen}
-        name="Produce Category"
+      <Drawer.Screen 
+          component={MarketplaceCategoryScreen} 
+          name="Produce Category" 
+          options={{ title: <FormattedMessage id="produce_category" /> }} 
       />
       <Drawer.Screen component={HomeScreen} name="Home" />
       <Drawer.Screen component={PartnerScreen} name="Partner" />
@@ -337,7 +356,12 @@ export default function HomeScreenNavigator(props): JSX.Element {
       <Drawer.Screen component={CategoryScreen} name="Category" />
 
       {/* Edutec Screens */}
-      <Drawer.Screen component={CoursesHomeScreen} name="Courses Home" />
+      {/* <Drawer.Screen component={CoursesHomeScreen} name="Courses Home" /> */}
+      <Drawer.Screen 
+          component={CoursesHomeScreen} 
+          name="Courses Home" 
+          options={{ title: <FormattedMessage id="courses_home" /> }} 
+      />
       <Drawer.Screen component={CourseCategoryScreen} name="Course Category" />
       <Drawer.Screen component={CourseScreen} name="Course" />
       <Drawer.Screen component={VideoPlayer} name="Video" />
@@ -345,8 +369,17 @@ export default function HomeScreenNavigator(props): JSX.Element {
       <Drawer.Screen component={Subscriptions} name="My Course Subscriptions" />
 
       {/* Marketplace Screens */}
-      <Drawer.Screen component={MarketplaceHome} name="Marketplace Home" />
-      <Drawer.Screen component={ProduceScreen} name="Produce" />
+      <Drawer.Screen 
+          component={MarketplaceHome} 
+          name="Marketplace Home" 
+          options={{ title: <FormattedMessage id="cart_page" /> }} 
+      />
+
+      <Drawer.Screen 
+          component={ProduceScreen} 
+          name="Produce" 
+          options={{ title: <FormattedMessage id="produce" /> }} 
+      />
       <Drawer.Screen component={StorefrontScreen} name="Storefront" />
       <Drawer.Screen
         component={ManageStorefrontScreen}
@@ -361,10 +394,18 @@ export default function HomeScreenNavigator(props): JSX.Element {
       <Drawer.Screen component={ManageSalesScreen} name="Manage Sales" />
       <Drawer.Screen component={AddInventoryScreen} name="Add Inventory" />
       <Drawer.Screen component={AddProduceScreen} name="Add Produce" />
-      <Drawer.Screen component={MyOrdersScreen} name="My Orders" />
+      <Drawer.Screen 
+          component={MyOrdersScreen} 
+          name="My Orders" 
+          options={{ title: <FormattedMessage id="my_orders" /> }} 
+      />
       <Drawer.Screen component={OrderDetailScreen} name="Order Detail" />
       {/* Books */}
-      <Drawer.Screen component={BooksHomeScreen} name="Books" />
+      <Drawer.Screen 
+          component={BooksHomeScreen} 
+          name="Books" 
+          options={{ title: <FormattedMessage id="books_home" /> }} 
+      />
     </Drawer.Navigator>
   );
 }

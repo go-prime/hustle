@@ -40,6 +40,7 @@ import {
 } from '../../components/text';
 import {getAbsoluteURL} from '../../utils';
 import CartCounter from '../../components/cart'
+import { FormattedMessage } from 'react-intl';
 
 const removeFromCart = (product_id, product_name, qty, onChange) => {
   axios
@@ -179,7 +180,7 @@ export default function CartScreen({navigation}) {
     return (
       <View style={{flex: 1}}>
         <ProfileButton
-          label="My Orders"
+          label={<FormattedMessage id="my_orders" />}
           action={() => {
             navigation.navigate('My Orders');
           }}
@@ -202,7 +203,7 @@ export default function CartScreen({navigation}) {
   return (
     <View style={{flex: 1, position: 'relative'}}>
       <ProfileButton
-        label="My Orders"
+        label={<FormattedMessage id="my_orders" />}
         action={() => {
           navigation.navigate('My Orders');
         }}
@@ -247,7 +248,7 @@ export default function CartScreen({navigation}) {
         <Pressable onPress={checkout}>
           <View style={styles.checkoutButton}>
             <FontAwesomeIcon icon={faBasketShopping} size={24} color="white" />
-            <Text style={styles.checkoutText}>Checkout</Text>
+            <Text style={styles.checkoutText}>{<FormattedMessage id="checkout_button_text" />}</Text>
           </View>
         </Pressable>
       </ScrollView>

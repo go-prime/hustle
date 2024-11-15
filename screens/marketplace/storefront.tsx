@@ -13,6 +13,7 @@ import {ItemButton} from '../../components/button';
 import { Paragraph } from '../../components/text';
 import handleResourceRetrievalError from '../../scripts/permissions';
 import { MapButton } from '../../components/maps';
+import { FormattedMessage } from 'react-intl';
 
 
 export default function StorefrontScreen(props) {
@@ -71,7 +72,7 @@ export default function StorefrontScreen(props) {
           </Pill>
         </Pressable>
       ))}
-      <Heading heading="Featured Produce" />
+      <Heading heading={<FormattedMessage id="featured_produce" />} />
       <Row styles={{flexWrap: 'wrap', gap: 16, margin: 12}}>
         {data.featured_produce.map(p => (
           <ItemButton

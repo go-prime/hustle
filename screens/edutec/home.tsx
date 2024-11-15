@@ -23,6 +23,7 @@ import {Heading} from '../../components/text';
 import colors from '../../styles/colors';
 import {CategoryButton, CourseButton} from '../../components/button';
 import getColors from '../../hooks/colors';
+import { FormattedMessage } from 'react-intl';
 
 export default function CoursesHomeScreen({navigation}): JSX.Element {
   const width = Dimensions.get('window').width;
@@ -81,9 +82,9 @@ export default function CoursesHomeScreen({navigation}): JSX.Element {
           style={[styles.myCourseCard, {backgroundColor: colorScheme.primary}]}
           onPress={() => navigation.navigate('My Course Subscriptions')}>
           <FontAwesomeIcon icon={faUserGraduate} size={36} color={'white'} />
-          <Text style={styles.myCourseCardText}>My Courses</Text>
+          <Text style={styles.myCourseCardText}><FormattedMessage id="my_courses" /></Text>
         </Pressable>
-        <Heading heading="Continue Learning" />
+        <Heading heading={<FormattedMessage id="continue_learning" />} />
 
         <ScrollView horizontal={true}>
           {data.continue_learning.map(b => (
@@ -100,7 +101,7 @@ export default function CoursesHomeScreen({navigation}): JSX.Element {
         </ScrollView>
       </View>
 
-      <Heading>Subjects</Heading>
+      <Heading><FormattedMessage id="subjects" /></Heading>
       <ScrollView horizontal>
         {data.categories.map(cat => (
           <CategoryButton
@@ -113,7 +114,7 @@ export default function CoursesHomeScreen({navigation}): JSX.Element {
           />
         ))}
       </ScrollView>
-      <Heading heading="Featured Courses" />
+      <Heading heading={<FormattedMessage id="featured_courses" />} />
       <ScrollView horizontal  >
         {data.courses.map(b => (
           <CourseButton

@@ -24,6 +24,7 @@ import {faHeart, faShoppingBasket, faTimes} from '@fortawesome/free-solid-svg-ic
 import colors from '../../styles/colors';
 import {removeBtn} from '../../styles/buttons';
 import {SubTitle} from '../../components/text';
+import { FormattedMessage } from 'react-intl';
 
 const removeFromWishlist = (product_id, product_name, onSuccess) => {
   axios
@@ -113,7 +114,7 @@ export default function WishlistScreen(props) {
     return (
       <Centered styles={{flex: 1, flexDirection: 'column'}}>
         <Text style={styles.title}>
-          Your wish list is empty, start shopping!
+          {<FormattedMessage id="wish_list_empty" />}
         </Text>
         <FontAwesomeIcon
           icon={faHeart}
